@@ -11,5 +11,8 @@
     "learning"
   ],
   "author": "Edgar Pino",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
 }
