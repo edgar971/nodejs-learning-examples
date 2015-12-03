@@ -1,7 +1,23 @@
-var flight = require('./modules/flight');
+var flight = require('./modules/flight'),
+    conferenceFlight,
+    vacationFlight;
 
-flight.setDestination('NYC');
-flight.setOrigin('ORD');
-flight.setNumber(543);
+conferenceFlight = flight({
+    number: 443,
+    origin: 'PDS',
+    destination: 'NYC',
+});
 
-console.log(flight.getInfo());
+vacationFlight = flight({
+    number: 890,
+    origin: 'SLC',
+    destination: 'GRB',
+});
+
+conferenceFlight.triggerDepart();
+
+console.log(conferenceFlight.getInformation());
+
+vacationFlight.triggerDepart()
+
+console.log(vacationFlight.getInformation());

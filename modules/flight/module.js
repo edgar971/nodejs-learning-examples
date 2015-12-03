@@ -1,8 +1,8 @@
-module.exports = function(info) {
+var Flight = function() {
     /*
-    Default Values
+     Default Values
      */
-    var values = {
+    this.data = {
         number: null,
         origin: null,
         destination: null,
@@ -13,28 +13,39 @@ module.exports = function(info) {
     };
 
     /*
-    Set the values with info
+     Set the values with info
      */
-    for(prop in values) {
-        if(values[prop] !== undefined) {
-            values[prop] = info[prop];
+    this.fill = function(info) {
+        for(prop in this.data) {
+            if(this.data[prop] !== 'undefined') {
+                this.data[prop] = info[prop];
+            }
         }
-    }
+    };
 
-    /*
-    Public API
-     */
+    //Setters
+    this.triggerDepart = function() {
+        this.data.actualDepart = Date.now();
+    };
 
-    return {
-        triggerDepart: function() {
-            values.actualDepart = Date.now();
-        },
-        triggerArrive: function() {
-            values.actualArrive = Date.now();
-        },
-        getInformation: function() {
-            return values;
-        }
-    }
+    this.triggerArrive = function() {
+        this.data.actualArrive = Date.now();
+    };
+
+    this.getInformation = function() {
+        return this.data;
+    };
+
+
+
+};
+
+//Export as a factory
+
+module.exports = function(info) {
+    var instance = new Flight();
+    instance.fill(info);
+
+    return instance;
 };
 
