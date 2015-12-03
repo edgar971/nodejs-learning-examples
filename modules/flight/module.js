@@ -1,3 +1,6 @@
+var totalFlights = 0,
+    flights = [];
+
 var Flight = function() {
     /*
      Default Values
@@ -40,12 +43,31 @@ var Flight = function() {
 
 };
 
+
+
+
 //Export as a factory
 
-module.exports = function(info) {
+exports.create = function(info) {
+
     var instance = new Flight();
     instance.fill(info);
 
+    totalFlights++;
+    flights.push(info);
+
     return instance;
+
 };
+
+
+exports.getTotal = function() {
+    return totalFlights;
+};
+
+
+exports.getFlights = function() {
+    return flights;
+}
+
 
