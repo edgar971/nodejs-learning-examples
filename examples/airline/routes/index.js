@@ -22,5 +22,16 @@ router.get('/flight/:number', function(req, res, next){
 
 });
 
+router.put('/flight/:number/arrived', function(){
+    var number = req.param('number');
+    if(typeof flights[number] !== 'undefined') {
+        flights[number].triggerArrive();
+        res.json({status: 'success'});
+
+    } else {
+        res.json({status: 'error'});
+    }
+});
+
 
 module.exports = router;
