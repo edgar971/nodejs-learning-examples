@@ -1,20 +1,25 @@
 var express = require('express'),
     router = express.Router(),
     flight = require('../../../custom_modules/flight'),
-    flights = require('../data/index.js');
-
-for(var number in flights) {
-    flights[number] = flight.create(flights[number]);
-}
+    flightsData = require('../data'),
+    flights = {};
 
 
+flightsData.forEach(function(item,index,array){
+    flights[item.number] = flight.create(item);
+});
 router.get('/', function(req, res, next) {
-  res.json(flights);
+  res.json(flightsData);
 });
 
 router.get('/flight/:number', function(req, res, next){
     var number = req.param('number');
-    res.json(flights[number].getInformation());
+    if(typeof flights[number] !== 'undefined') {
+        res.json(flights[number].getInformation());
+    } else {
+        res.json({status: 'error'});
+    }
+
 });
 
 
