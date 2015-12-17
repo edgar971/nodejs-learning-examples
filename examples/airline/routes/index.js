@@ -8,11 +8,11 @@ var express = require('express'),
 flightsData.forEach(function(item,index,array){
     flights[item.number] = flight.create(item);
 });
-router.get('/', function(req, res, next) {
+router.get('/api/', function(req, res, next) {
   res.json(flightsData);
 });
 
-router.get('/flight/:number', function(req, res, next){
+router.get('/api/flight/:number', function(req, res, next){
     var number = req.param('number');
     if(typeof flights[number] !== 'undefined') {
         res.json(flights[number].getInformation());
@@ -22,7 +22,7 @@ router.get('/flight/:number', function(req, res, next){
 
 });
 
-router.put('/flight/:number/arrived', function(){
+router.put('/api/flight/:number/arrived', function(req, res){
     var number = req.param('number');
     if(typeof flights[number] !== 'undefined') {
         flights[number].triggerArrive();
@@ -33,5 +33,7 @@ router.put('/flight/:number/arrived', function(){
     }
 });
 
-
+router.get('/', function(req,res){
+    res.render('index', {flights: flightsData});
+});
 module.exports = router;
