@@ -16,5 +16,10 @@
     "material-design-lite": "^1.0.6",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.4",
+    "should": "^8.0.1",
+    "supertest": "^1.1.0"
   }
 }
