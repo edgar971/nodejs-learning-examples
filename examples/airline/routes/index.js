@@ -19,7 +19,7 @@ module.exports = function(flightsData){
     });
 
     router.get('/api/flight/:number', function(req, res, next){
-        var number = req.param('number');
+        var number = req.params.number;
         if(typeof flights[number] !== 'undefined') {
             res.json(flights[number].getInformation());
         } else {
@@ -29,7 +29,7 @@ module.exports = function(flightsData){
     });
 
     router.put('/api/flight/:number/arrived', function(req, res){
-        var number = req.param('number');
+        var number = req.params.number;
         if(typeof flights[number] !== 'undefined') {
             flights[number].triggerArrive();
             res.json({status: 'success'});
