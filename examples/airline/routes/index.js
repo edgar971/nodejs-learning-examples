@@ -23,7 +23,7 @@ module.exports = function(flightsData){
         if(typeof flights[number] !== 'undefined') {
             res.json(flights[number].getInformation());
         } else {
-            res.json({status: 'error'});
+            res.status(404).json({status: 'error'});
         }
 
     });
@@ -35,7 +35,7 @@ module.exports = function(flightsData){
             res.json({status: 'success'});
 
         } else {
-            res.json({status: 'error'});
+            res.status(404).json({status: 'error'});
         }
     });
 
