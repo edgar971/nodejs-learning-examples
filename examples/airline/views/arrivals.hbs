@@ -1,0 +1,21 @@
+<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+    <thead>
+    <tr>
+        <th class="mdl-data-table__cell--non-numeric">Number</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Arrived</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each flights}}
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric">{{number}}</td>
+            <td>{{origin}}</td>
+            <td>{{destination}}</td>
+            <td>{{actualArrive}}</td>
+        </tr>
+    {{/each}}
+
+    </tbody>
+</table>

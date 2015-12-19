@@ -1,3 +1,4 @@
+var FlightSchema = require('../schemas/flight');
 
 module.exports = function(flightsData){
     var express = require('express'),
@@ -32,7 +33,15 @@ module.exports = function(flightsData){
         var number = req.params.number;
         if(typeof flights[number] !== 'undefined') {
             flights[number].triggerArrive();
-            res.json({status: 'success'});
+            var record = new FlightSchema(flights[number].getInformation());
+            record.save(function(err){
+                if(err) {
+                    console.log(err);
+                    res.status(500).json({status: 'error'});
+                } else {
+                    res.json({status: 'success'});
+                }
+            });
 
         } else {
             res.status(404).json({status: 'error'});
@@ -44,6 +53,18 @@ module.exports = function(flightsData){
      */
     router.get('/', function(req,res){
         res.render('index', {flights: flightsData});
+    });
+
+    router.get('/arrivals', function(req,res){
+        FlightSchema.find()
+            .setOptions({sort: 'actualArrive'})
+            .exec(function(err, flights){
+                if(!err) {
+                    res.render('arrivals', {flights: flights});
+                } else {
+
+                }
+            });
     });
 
     return router;

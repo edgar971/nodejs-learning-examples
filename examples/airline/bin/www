@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 var flightsData = require('../data');
-var app = require('../app')(flightsData);
+var db = require('../db');
+var app = require('../app')(flightsData,db);
 var debug = require('debug')('airline:server');
 var http = require('http');
-var db = require('../db');
 
 
 /**
