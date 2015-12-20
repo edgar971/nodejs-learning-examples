@@ -60,11 +60,15 @@ module.exports = function(flightsData){
             .setOptions({sort: 'actualArrive'})
             .exec(function(err, flights){
                 if(!err) {
-                    res.render('arrivals', {flights: flights});
+                    res.render('arrivals', {flights: flights})
                 } else {
 
                 }
             });
+    });
+
+    router.get('/history', function(req,res){
+        res.status(200).json(req.session.history);
     });
 
     return router;

@@ -1,13 +1,14 @@
 
 module.exports = function(flightsData, db) {
     var express = require('express');
+    var session = require('express-session');
+    var MongoStore = require('connect-mongo')(session);
     var path = require('path');
     var favicon = require('serve-favicon');
     var logger = require('morgan');
     var cookieParser = require('cookie-parser');
     var bodyParser = require('body-parser');
     var exphbs = require('express-handlebars');
-    var MongoStore = require('connect-mongo')(express);
 
 
     var routes = require('./routes/index')(flightsData);
@@ -24,11 +25,13 @@ module.exports = function(flightsData, db) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
-    app.use(express.session({
-        secret: 'edgar pino',
+    app.use(session({
+        secret: 'airline',
         store: new MongoStore({
-          mongoose_connection: db
-        })
+            mongooseConnection: db
+        }),
+        resave: true,
+        saveUninitialized: true
     }));
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static('./node_modules'));
@@ -38,6 +41,9 @@ module.exports = function(flightsData, db) {
      */
     app.use(function (req,res,next) {
         res.set('X-Powered-By', 'Awesome Server');
+        //Record Session History
+        req.session.history = req.session.history || [];
+        req.session.history.push(req.url);
         next();
     });
     app.use('/', routes);
