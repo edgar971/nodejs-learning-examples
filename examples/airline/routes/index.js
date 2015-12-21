@@ -1,6 +1,6 @@
 var FlightSchema = require('../schemas/flight');
 
-module.exports = function(flightsData){
+module.exports = function(flightsData,passport){
     var express = require('express'),
         router = express.Router(),
         flight = require('../../../custom_modules/flight'),
@@ -67,8 +67,26 @@ module.exports = function(flightsData){
             });
     });
 
-    router.get('/history', function(req,res){
-        res.status(200).json(req.session.history);
+    /*
+     Login Stuff
+     */
+    router.get('/login', function(req,res){
+        res.render('login');
+    });
+    router.post('/login', passport.authenticate('local',{
+        failureRedirect: '/login',
+        successRedirect: '/user'
+    }));
+
+    router.get('/user/', function(req,res){
+        if(req.session.passport === undefined || req.session.passport.user === undefined) {
+            res.redirect('/login');
+        } else {
+            res.render('user', {
+                user: req.user,
+                history: req.session.history
+            });
+        }
     });
 
     return router;

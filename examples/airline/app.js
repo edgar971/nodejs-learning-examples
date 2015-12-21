@@ -9,9 +9,10 @@ module.exports = function(flightsData, db) {
     var cookieParser = require('cookie-parser');
     var bodyParser = require('body-parser');
     var exphbs = require('express-handlebars');
+    var passport = require('./auth');
 
 
-    var routes = require('./routes/index')(flightsData);
+    var routes = require('./routes/index')(flightsData,passport);
 
     var app = express();
 
@@ -35,15 +36,24 @@ module.exports = function(flightsData, db) {
     }));
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static('./node_modules'));
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     /**
      * Middleware
      */
     app.use(function (req,res,next) {
+        console.log(req);
         res.set('X-Powered-By', 'Awesome Server');
         //Record Session History
         req.session.history = req.session.history || [];
-        req.session.history.push(req.url);
+        req.session.history.push(
+            {
+                date: Date(),
+                url: req.url,
+                method: req.method
+            }
+        );
         next();
     });
     app.use('/', routes);
