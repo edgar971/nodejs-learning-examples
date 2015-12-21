@@ -43,7 +43,6 @@ module.exports = function(flightsData, db) {
      * Middleware
      */
     app.use(function (req,res,next) {
-        console.log(req);
         res.set('X-Powered-By', 'Awesome Server');
         //Record Session History
         req.session.history = req.session.history || [];
@@ -56,6 +55,7 @@ module.exports = function(flightsData, db) {
         );
         next();
     });
+
     app.use('/', routes);
 
     return app;
