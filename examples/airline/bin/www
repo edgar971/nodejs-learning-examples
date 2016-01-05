@@ -8,7 +8,18 @@ var db = require('../db');
 var app = require('../app')(flightsData,db);
 var debug = require('debug')('airline:server');
 var http = require('http');
+var repl = require('repl');
+var argv = require('optimist');
 
+
+/**
+ * REPL
+ */
+
+(function(){
+  var prompt = repl.start({prompt: 'airline> '});
+  prompt.context.flights = flightsData;
+})();
 
 /**
  * Get port from environment and store in Express.
@@ -90,3 +101,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+

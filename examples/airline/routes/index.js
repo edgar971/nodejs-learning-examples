@@ -1,5 +1,21 @@
-var FlightSchema = require('../schemas/flight');
+var FlightSchema = require('../schemas/flight'),
+    Emitter = require('events').EventEmitter,
+    flightEmitter = new Emitter();
 
+//execute the code when the arrival event is emitted
+flightEmitter.on('arrival', function(flight){
+    var record = new FlightSchema(flight.getInformation());
+
+    record.save(function(err){
+        if(err) {
+            console.log(err);
+        }
+    });
+});
+
+flightEmitter.on('arrival', function(flight){
+   console.log('Flight arrived:' + flight);
+});
 module.exports = function(flightsData,passport){
     var express = require('express'),
         router = express.Router(),
@@ -33,15 +49,12 @@ module.exports = function(flightsData,passport){
         var number = req.params.number;
         if(typeof flights[number] !== 'undefined') {
             flights[number].triggerArrive();
-            var record = new FlightSchema(flights[number].getInformation());
-            record.save(function(err){
-                if(err) {
-                    console.log(err);
-                    res.status(500).json({status: 'error'});
-                } else {
-                    res.json({status: 'success'});
-                }
-            });
+
+            //Emit the arrival event
+            flightEmitter.emit('arrival', flights[number]);
+
+            res.json({status: 'success'});
+
 
         } else {
             res.status(404).json({status: 'error'});
@@ -88,6 +101,15 @@ module.exports = function(flightsData,passport){
             });
         }
     });
+
+
+
+
+
+
+
+
+
 
     return router;
 };
